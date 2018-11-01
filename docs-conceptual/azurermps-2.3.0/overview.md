@@ -33,10 +33,9 @@ Install-Module -Name AzureRm.BootStrapper
 
 # Install and import the API Version Profile required by Azure Stack into the current PowerShell session.
 Use-AzureRmProfile -Profile 2018-03-01-hybrid -Force
-
 ```
 
-##Release Notes
+## Release Notes
 * The release 2.3.0 comes with a list of breaking changes. To upgrade from the 1.2.11 version, we have created a migration guide at https://aka.ms/azspowershellmigration
 * This release corresponds to the azurestack specific api profile 2018-03-01-hybrid
 * All the modules are taking greater than or equal to dependency on the AzureRm.Profile module.

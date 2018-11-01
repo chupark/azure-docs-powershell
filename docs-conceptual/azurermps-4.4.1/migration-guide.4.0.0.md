@@ -12,7 +12,7 @@ This document serves as both a breaking change notification and migration guide 
 - [Breaking changes to Sql cmdlets](#breaking-changes-to-sql-cmdlets)
 - [Breaking changes to Storage cmdlets](#breaking-changes-to-storage-cmdlets)
 - [Breaking Changes to Profile Cmdlets](#breaking-changes-to-profile-cmdlets)
-## Breaking changes to Compute cmdlets
+  ## Breaking changes to Compute cmdlets
 
 The following output types were affected this release:
 
@@ -49,13 +49,13 @@ The following cmdlets were affected this release:
 ## Breaking changes to Insights cmdlets
 
 The following cmdlets were affected this release:
-    
+
 ### Get-AzureRmUsage
 - This cmdlet has been deprecated.
 
 ### Remove-AzureRmAlertRule
 - The output of this cmdlet has changed from a list with a single object to a single object; this object includes the requestId, and status code.
-    
+
 ```powershell
 # Old  
 $s1 = Remove-AzureRmAlertRule -ResourceGroup $resourceGroup -name chiricutin
@@ -70,20 +70,20 @@ $s1 = Remove-AzureRmAlertRule -ResourceGroup $resourceGroup -name chiricutin
 $r = $s1.RequestId
 $s = $s1.StatusCode
 ```
-    
+
 ### Add-AzureRmLogAlertRule
 - This cmdlet has been deprecated.
-    
+
 ### Get-AzureRmAlertRule
 - Each element of the the output (a list of objects) of this cmdlet is flattened, i.e. instead of returning objects with the structure `{ Id, Location, Name, Tags, Properties }` it will return objects with the structure `{ Id, Location, Name, Tags, Type, Description, IsEnabled, Condition, Actions, LastUpdatedTime, ...}`, which is all of the attributes of an Azure Resource plus all of the attributes of an AlertRuleResource at the top level.
-    
+
 ```powershell
 # Old
 $rules = Get-AzureRmAlertRule -ResourceGroup $resourceGroup
 if ($rules -and $rules.count -ge 1)
 {
     Write-Host -fore red "Error updating alert rule"
-      
+
     Write-Host $rules(0).Id
     Write-Host $rules(0).Properties.IsEnabled
     Write-Host $rules(0).Properties.Condition
@@ -94,18 +94,18 @@ $rules = Get-AzureRmAlertRule -ResourceGroup $resourceGroup
 if ($rules -and $rules.count -ge 1)
 {
     Write-Host -fore red "Error updating alert rule"
- 
+
     Write-Host $rules(0).Id
-      
+
     # Properties will remain for a while
     Write-Host $rules(0).Properties.IsEnabled
-      
+
     # But the properties will be at the top level too. Later Properties will be removed
     Write-Host $rules(0).IsEnabled
     Write-Host $rules(0).Condition
 }
 ```
-    
+
 ### Get-AzureRmAutoscaleSetting
 - The `AutoscaleSettingResourceName` field is deprecated since it always has the same value as the `Name` field.
 
@@ -119,11 +119,11 @@ if ($s1.AutoscaleSettingResourceName -ne $s1.Name)
 
 # New
 $s1 = Get-AzureRmAutoscaleSetting -ResourceGroup $resourceGroup -Name MySetting
-    
+
 # There won't be a AutoscaleSettingResourceName
 Write-Host $s1.Name
 ```
-    
+
 ### Remove-AzureRmLogProfile
 - The output of this cmdlet will change from `Boolean` to and object containing `RequestId` and `StatusCode`
 
@@ -144,10 +144,10 @@ $s1 = Remove-AzureRmLogProfile -Name myLogProfile
 $r = $s1.RequestId
 $s = $s1.StatusCode
 ```
-    
+
 ### Add-AzureRmLogProfile
 - The output of this cmdlet will change from an object that includes the requestId, status code, and the updated or newly created resource
-    
+
 ```powershell
 # Old  
 $s1 = Add-AzureRmLogProfile -Name default -StorageAccountId /subscriptions/df602c9c-7aa0-407d-a6fb-eb20c8bd1192/resourceGroups/JohnKemTest/providers/Microsoft.Storage/storageAccounts/johnkemtest8162 -Locations Global -categ Delete, Write, Action -retention 3
@@ -158,9 +158,8 @@ $s1 = Add-AzureRmLogProfile -Name default -StorageAccountId /subscriptions/df602
 $r = $s1.RequestId
 $s = $s1.StatusCode
 $a = $s1.NewResource.ServiceBusRuleId
-    
 ```
-    
+
 ### Set-AzureRmDiagnosticSettings
 - The command is going to be renamed to `Update-AzureRmDiagnsoticSettings`
 
@@ -284,7 +283,7 @@ The following output type properties were affected this release:
     - `Set-AzureStorageBlobContent`
     - `Start-AzureStorageBlobCopy`
     - `Stop-AzureStorageBlobCopy`
-    
+
 ### AzureStorageContainer.CloudBlobContainer.ServiceClient
 - The following properties were removed from this type (_note_: they can still be found in the `DefaultRequestOptions` property):
     - `LocationMode`
@@ -296,7 +295,7 @@ The following output type properties were affected this release:
     - `Get-AzureStorageContainer`
     - `New-AzureStorageContainer`
     - `Set-AzureStorageContainerAcl`
-    
+
 ### AzureStorageQueue.CloudQueue.ServiceClient
 - The following properties were removed from this type (_note_: they can still be found in the `DefaultRequestOptions` property):
     - `LocationMode`
@@ -306,7 +305,7 @@ The following output type properties were affected this release:
 - This change affects the following cmdlets:
     - `Get-AzureStorageQueue`
     - `New-AzureStorageQueue`
-    
+
 ### AzureStorageTable.CloudTable.ServiceClient
 - The following properties were removed from this type (_note_: they can still be found in the `DefaultRequestOptions` property):
     - `LocationMode`
@@ -317,16 +316,16 @@ The following output type properties were affected this release:
 - This change affects the following cmdlets:
     - `Get-AzureStorageTable`
     - `New-AzureStorageTable`
-    
+
 ```powershell
 # Old
-$LocationMode = (Get-AzureStorageBlob -Container $containername)[0].ICloudBlob.ServiceClient.LocationMode		
+$LocationMode = (Get-AzureStorageBlob -Container $containername)[0].ICloudBlob.ServiceClient.LocationMode       
 $ParallelOperationThreadCount = (Get-AzureStorageContainer -Container $containername).CloudBlobContainer.ServiceClient.ParallelOperationThreadCount
 $PayloadFormat = (Get-AzureStorageTable -Name $tablename).CloudTable.ServiceClient.PayloadFormat
 $RetryPolicy = (Get-AzureStorageQueue -Name $queuename).CloudQueue.ServiceClient.RetryPolicy
 
 # New
-$LocationMode = (Get-AzureStorageBlob -Container $containername)[0].ICloudBlob.ServiceClient.DefaultRequestOptions.LocationMode		
+$LocationMode = (Get-AzureStorageBlob -Container $containername)[0].ICloudBlob.ServiceClient.DefaultRequestOptions.LocationMode     
 $ParallelOperationThreadCount = (Get-AzureStorageContainer -Container $containername).CloudBlobContainer.ServiceClient.DefaultRequestOptions.ParallelOperationThreadCount
 $PayloadFormat = (Get-AzureStorageTable -Name $tablename).CloudTable.ServiceClient.DefaultRequestOptions.PayloadFormat
 $RetryPolicy = (Get-AzureStorageQueue -Name $queuename).CloudQueue.ServiceClient.DefaultRequestOptions.RetryPolicy
